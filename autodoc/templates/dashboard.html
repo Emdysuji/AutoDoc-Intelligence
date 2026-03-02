@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AutoDoc Intelligence Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 2rem; background: #f7f9fc; }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th, td { border: 1px solid #ddd; padding: 0.6rem; vertical-align: top; }
+        th { background: #1f2937; color: white; }
+        .failed { color: #b91c1c; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>AutoDoc Intelligence - Admin Dashboard</h1>
+    <h2>Documents</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th><th>Filename</th><th>Status</th><th>Type</th><th>Extracted Data</th><th>Error</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for doc in documents %}
+            <tr>
+                <td>{{ doc.id }}</td>
+                <td>{{ doc.filename }}</td>
+                <td class="{% if doc.processing_status == 'failed' %}failed{% endif %}">{{ doc.processing_status }}</td>
+                <td>{{ doc.document_type or '-' }}</td>
+                <td><pre>{{ doc.extracted_data or {} }}</pre></td>
+                <td>{{ doc.error_message or '-' }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Failed Jobs</h2>
+    <ul>
+        {% for doc in failed_jobs %}
+        <li>#{{ doc.id }} {{ doc.filename }} - {{ doc.error_message }}</li>
+        {% else %}
+        <li>No failed jobs</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
